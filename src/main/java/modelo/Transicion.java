@@ -1,13 +1,32 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package modelo;
 
-/**
- *
- * @author josecana
- */
 public class Transicion {
-    
+
+    private String origen;
+    private String simbolo;
+    private String destino;
+
+    public Transicion(String origen, String simbolo, String destino) {
+        this.origen = origen;
+        this.simbolo = simbolo;
+        this.destino = destino;
+    }
+
+    public String getOrigen() {
+        return origen;
+    }
+
+    public String getSimbolo() {
+        return simbolo;
+    }
+
+    public String getDestino() {
+        return destino;
+    }
+
+    @Override
+    public String toString() {
+        return origen + " --" + simbolo + "--> " + destino;
+    }
 }

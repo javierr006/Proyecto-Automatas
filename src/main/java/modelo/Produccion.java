@@ -1,13 +1,26 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
- */
+
 package modelo;
 
-/**
- *
- * @author josecana
- */
 public class Produccion {
-    
+
+    private String izquierda;
+    private String derecha;
+
+    public Produccion(String izquierda, String derecha) {
+        this.izquierda = izquierda;
+        this.derecha = derecha;
+    }
+
+    public String getIzquierda() {
+        return izquierda;
+    }
+
+    public String getDerecha() {
+        return derecha;
+    }
+
+    @Override
+    public String toString() {
+        return izquierda + ">" + derecha;
+    }
 }
