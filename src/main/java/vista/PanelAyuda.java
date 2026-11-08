@@ -3,20 +3,57 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
 package vista;
-
+import app.*;
+import modelo.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.nio.file.*;
+import java.util.*;
+import java.util.List;
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 /**
  *
  * @author josecana
  */
 public class PanelAyuda extends javax.swing.JPanel {
-
-    /**
-     * Creates new form PanelAyuda
-     */
     public PanelAyuda() {
         initComponents();
+        construir();
     }
-
+    private void construir() {
+        Tema.preparar(this);
+        add(Tema.cabecera("Guía rápida","Un recorrido completo, desde su primer modelo hasta el reporte final."),BorderLayout.NORTH);
+        JEditorPane guia=new JEditorPane("text/html", """
+        <html><body style='font-family:sans-serif;color:#182843;margin:22px;font-size:12px'>
+        <h2 style='color:#2563eb'>01 · Construya un autómata</h2>
+        <p>En <b>Autómatas</b>, escriba un nombre y pulse Crear AFD. Agregue estados y símbolos individuales.<br>
+        Seleccione el estado inicial, marque los de aceptación y agregue una transición para cada par estado/símbolo.</p>
+        <p><b>Ejemplo binario</b> carga un AFD que acepta cadenas que terminan en 1: 101 se acepta; 100 se rechaza.</p>
+        <h2 style='color:#2563eb'>02 · Trabaje con gramáticas</h2>
+        <p>Defina no terminales, terminales y un símbolo inicial. Cada símbolo ocupa un carácter.<br>
+        Agregue reglas como <b>S → aS | b | epsilon</b>. También puede escribir ε.<br>
+        Se admiten reglas lineales por la derecha o por la izquierda; una gramática no debe mezclar ambas orientaciones.<br>
+        Las conversiones crean un modelo nuevo en el otro módulo y solicitan confirmación si ya existe uno.</p>
+        <h2 style='color:#2563eb'>03 · Evalúe y siga el resultado</h2>
+        <p>En <b>Evaluación</b>, elija AFD o Gramática. Escriba la cadena y pulse Evaluar cadena.<br>
+        Un campo vacío representa la cadena vacía. El AFD debe estar completo; revise Validar AFD.<br>
+        El historial muestra el modelo y los pasos de cada evaluación y se conserva durante esta sesión.</p>
+        <h2 style='color:#2563eb'>04 · Guarde, grafique y comparta</h2>
+        <p><b>Archivos</b> permite guardar y abrir .afd y .gtk. Los GTK guardados incluyen metadatos para conservar los símbolos y el inicial.<br>
+        En Autómatas → Gráfico y DOT puede previsualizar y exportar PNG sin instalar programas.<br>
+        La opción <b>PNG con Graphviz</b> requiere Graphviz; también puede exportar DOT y procesarlo por separado.<br>
+        <b>Reportes</b> genera un PDF con los modelos y el historial. Los caracteres fuera de la fuente PDF se representan por su código Unicode.</p>
+        <h2 style='color:#2563eb'>Antes de cerrar</h2>
+        <p>Guarde ambos modelos y exporte el historial si desea conservarlo. Los datos de sesión no se guardan automáticamente.<br>
+        Para eliminar un estado o no terminal, selecciónelo en la lista Inicial. Para eliminar un terminal, escríbalo en su campo.</p>
+        <p style='color:#687891'>Proyecto Autómatas · José y Diego · Java 21 / Maven / Swing</p>
+        </body></html>
+        """);
+        guia.setEditable(false);
+        guia.setCaretPosition(0);
+        add(new JScrollPane(guia));
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -37,8 +74,6 @@ public class PanelAyuda extends javax.swing.JPanel {
             .addGap(0, 300, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
-
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
 }

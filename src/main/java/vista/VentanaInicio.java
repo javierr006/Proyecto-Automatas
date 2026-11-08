@@ -3,22 +3,46 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package vista;
-
+import app.*;
+import modelo.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.nio.file.*;
+import java.util.*;
+import java.util.List;
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 /**
  *
  * @author josecana
  */
 public class VentanaInicio extends javax.swing.JFrame {
-    
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(VentanaInicio.class.getName());
-
-    /**
-     * Creates new form VentanaInicio
-     */
     public VentanaInicio() {
         initComponents();
+        construir();
     }
-
+    private void construir() {
+        setTitle("Bienvenido · Proyecto Autómatas");
+        setSize(860,560);
+        setMinimumSize(new Dimension(760,500));
+        setLocationRelativeTo(null);
+        setContentPane(crearPortada(()-> {
+            new VentanaMenu().setVisible(true); dispose();
+        }
+        ));
+    }
+    public static JPanel crearPortada(Runnable alEntrar) {
+        JPanel p=new JPanel(new BorderLayout(20,24));
+        p.setBackground(new Color(20,38,69));
+        p.setBorder(BorderFactory.createEmptyBorder(65,65,55,65));
+        JLabel titulo=new JLabel("<html><span style='color:#7fb0ff;font-size:12px'>JOSÉ + DIEGO / PROYECTO DE AUTÓMATAS</span><br><br><span style='color:white;font-size:38px'>Del lenguaje<br>al autómata.</span></html>");
+        p.add(titulo,BorderLayout.NORTH);
+        JLabel texto=new JLabel("<html><span style='color:#c5d6ef;font-size:14px'>Construya modelos, explore sus cadenas<br>y descubra cómo se conectan las gramáticas y los AFD.</span></html>");
+        p.add(texto);
+        JButton entrar=Tema.boton("Abrir espacio de trabajo  →",alEntrar);
+        p.add(entrar,BorderLayout.SOUTH);
+        return p;
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -43,32 +67,10 @@ public class VentanaInicio extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new VentanaInicio().setVisible(true));
+    public static void main(String[] args) {
+        Tema.instalar();
+        java.awt.EventQueue.invokeLater(()->new VentanaInicio().setVisible(true));
     }
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
 }

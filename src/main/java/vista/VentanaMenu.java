@@ -3,22 +3,47 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JFrame.java to edit this template
  */
 package vista;
-
+import app.*;
+import modelo.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.nio.file.*;
+import java.util.*;
+import java.util.List;
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 /**
  *
  * @author josecana
  */
 public class VentanaMenu extends javax.swing.JFrame {
-    
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(VentanaMenu.class.getName());
-
-    /**
-     * Creates new form VentanaMenu
-     */
+    private final RepositorioDatos datos;
     public VentanaMenu() {
-        initComponents();
+        this(new RepositorioDatos());
     }
-
+    public VentanaMenu(RepositorioDatos datos) {
+        this.datos=datos;
+        initComponents();
+        construirMenu();
+    }
+    private void construirMenu() {
+        setTitle("Proyecto Autómatas · José y Diego");
+        setDefaultCloseOperation(DO_NOTHING_ON_CLOSE);
+        setMinimumSize(new Dimension(1100,700));
+        setSize(1360,850);
+        setLocationRelativeTo(null);
+        setContentPane(new EspacioTrabajo(datos));
+        addWindowListener(new WindowAdapter() {
+            @Override public void windowClosing(WindowEvent e) {
+                cerrar();
+            }
+        }
+        );
+    }
+    private void cerrar() {
+        if((datos.isModificado()||!datos.getHistorial().isEmpty())&&!Tema.confirmar(this,"¿Cerrar la sesión? Guarde sus modelos y exporte el historial si desea conservarlos."))return;
+        dispose();
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -43,32 +68,10 @@ public class VentanaMenu extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
-
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new VentanaMenu().setVisible(true));
+    public static void main(String[] args) {
+        Tema.instalar();
+        java.awt.EventQueue.invokeLater(()->new VentanaMenu().setVisible(true));
     }
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
 }

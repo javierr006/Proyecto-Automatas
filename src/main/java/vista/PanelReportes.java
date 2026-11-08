@@ -3,20 +3,67 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/GUIForms/JPanel.java to edit this template
  */
 package vista;
-
+import app.*;
+import modelo.*;
+import java.awt.*;
+import java.awt.event.*;
+import java.nio.file.*;
+import java.util.*;
+import java.util.List;
+import javax.swing.*;
+import javax.swing.table.DefaultTableModel;
 /**
  *
  * @author josecana
  */
 public class PanelReportes extends javax.swing.JPanel {
-
-    /**
-     * Creates new form PanelReportes
-     */
+    private final RepositorioDatos datos;
+    private final JTextArea vista=Tema.area();
+    private final JLabel estado=Tema.subtitulo("El PDF incluye los modelos actuales y el historial de evaluaciones.");
+    private JButton exportar;
     public PanelReportes() {
-        initComponents();
+        this(new RepositorioDatos());
     }
-
+    public PanelReportes(RepositorioDatos datos) {
+        this.datos=datos;
+        initComponents();
+        construir();
+        datos.escuchar(this::actualizar);
+        actualizar();
+    }
+    private void construir() {
+        Tema.preparar(this);
+        add(Tema.cabecera("Reportes y resultados","Documente sus modelos y comparta los resultados en un PDF paginado."),BorderLayout.NORTH);
+        JPanel tarjeta=Tema.tarjeta("Contenido del reporte");
+        tarjeta.add(new JScrollPane(vista));
+        add(tarjeta);
+        exportar=Tema.boton("Exportar reporte PDF",()->Tema.ejecutar(this,this::exportar));
+        JPanel pie=new JPanel(new BorderLayout());
+        pie.setOpaque(false);
+        pie.add(Tema.fila(exportar),BorderLayout.NORTH);
+        pie.add(estado,BorderLayout.SOUTH);
+        add(pie,BorderLayout.SOUTH);
+    }
+    private void exportar() {
+        AFD a=Copias.afd(datos.getAfd());
+        Gramatica g=datos.getGramatica()==null?null:new ServicioGramatica().copiar(datos.getGramatica());
+        List<ResultadoEvaluacion> h=datos.getHistorial();
+        if(a==null&&g==null&&h.isEmpty())throw new IllegalArgumentException("Cree un modelo o evalúe una cadena antes de exportar.");
+        Path p=ArchivosUI.elegir(this,true,"pdf");
+        if(p==null)return;
+        ArchivosUI.trabajar(this,exportar,()->new reportes.ServicioReportes().generar(a,g,h,p),()->estado.setText("Reporte guardado: "+p));
+    }
+    private void actualizar() {
+        StringBuilder s=new StringBuilder("PROYECTO AUTÓMATAS\nReporte de sesión\n\n");
+        AFD a=datos.getAfd();
+        Gramatica g=datos.getGramatica();
+        s.append("AFD: ").append(a==null?"Sin cargar":a.getNombre()).append("\nGramática: ").append(g==null?"Sin cargar":g.getNombre()).append("\n\nEVALUACIONES: ").append(datos.getHistorial().size()).append("\n\n");
+        for(ResultadoEvaluacion r:datos.getHistorial()) {
+            s.append(r.getTipo()).append(" · ").append(r.getNombre()).append("\n").append(r.getCadena().isEmpty()?"ε":r.getCadena()).append(" → ").append(r.isAceptada()?"ACEPTADA":"RECHAZADA").append("\n").append(String.join("\n",r.getPasos())).append("\n\n");
+        }
+        vista.setText(s.toString());
+        vista.setCaretPosition(0);
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -37,8 +84,6 @@ public class PanelReportes extends javax.swing.JPanel {
             .addGap(0, 300, Short.MAX_VALUE)
         );
     }// </editor-fold>//GEN-END:initComponents
-
-
     // Variables declaration - do not modify//GEN-BEGIN:variables
     // End of variables declaration//GEN-END:variables
 }
